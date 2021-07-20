@@ -72,6 +72,11 @@ class AdvancedSearch(Ui_SearchDialog, QtWidgets.QDialog):
                 pattern = text.replace("*", "_WILDCARD_")
                 pattern = re.escape(pattern)
                 pattern = pattern.replace("_WILDCARD_", ".*")
+            elif self.match_kind.currentText() == "Keywords":
+                # positive lookahead https://stackoverflow.com/a/4389683
+                words = text.split()
+                words = ["(?=.*" + re.escape(w) + ")" for w in words]
+                pattern = "^" + "".join(words) + ".*$"
             else:
                 pattern = text
 
